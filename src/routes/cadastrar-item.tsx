@@ -100,8 +100,9 @@ function CadastrarItem() {
 
       if (error) throw error;
       setCreatedCode(data as string);
-
+    } catch {
       toast.error("Não foi possível cadastrar o objeto. Tente novamente.");
+
     } finally {
       setSaving(false);
     }
