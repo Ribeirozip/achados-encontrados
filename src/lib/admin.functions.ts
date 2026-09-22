@@ -123,11 +123,11 @@ export const updateRequestStatus = createServerFn({ method: "POST" })
     } as const;
 
     const nextStatus = statusMap[data.action];
-    const patch: Record<string, unknown> = {
+    const patch = {
       status: nextStatus,
       reviewed_at: new Date().toISOString(),
+      ...(typeof data.note === "string" ? { admin_note: data.note } : {}),
     };
-    if (typeof data.note === "string") patch['admin_note'] = data.note;
 
     const { error: updateError } = await supabase
       .from("recovery_requests")
