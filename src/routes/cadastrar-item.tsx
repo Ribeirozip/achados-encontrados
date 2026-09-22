@@ -13,6 +13,7 @@ import {
   LOCATIONS,
   SENSITIVE_CATEGORIES,
   TAG_SUGGESTIONS,
+  fileToBase64,
   normalize,
 } from "@/lib/lostfound";
 
