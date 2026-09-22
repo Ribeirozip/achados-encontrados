@@ -86,26 +86,21 @@ function CadastrarItem() {
         imagePath = path;
       }
 
-      const { data, error } = await supabase
-        .from("found_items")
-        .insert({
-          category: categories,
-          name: name.trim(),
-          description: description.trim() || null,
-          tags,
-          location: finalLocation,
-          date_found: dateFound,
-          time_found: timeFound || null,
-          image_url: imagePath,
-          is_sensitive: isSensitive,
-          status: "available",
-        })
-        .select("code")
-        .single();
+      const { data, error } = await supabase.rpc("create_found_item", {
+        p_category: categories,
+        p_name: name.trim(),
+        p_description: description.trim(),
+        p_tags: tags,
+        p_location: finalLocation,
+        p_date_found: dateFound,
+        p_time_found: timeFound || null,
+        p_image_url: imagePath ?? "",
+        p_is_sensitive: isSensitive,
+      });
 
       if (error) throw error;
-      setCreatedCode(data.code);
-    } catch {
+      setCreatedCode(data as string);
+
       toast.error("Não foi possível cadastrar o objeto. Tente novamente.");
     } finally {
       setSaving(false);
