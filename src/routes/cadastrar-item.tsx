@@ -13,6 +13,7 @@ import {
   LOCATIONS,
   SENSITIVE_CATEGORIES,
   TAG_SUGGESTIONS,
+  fileToBase64,
   normalize,
 } from "@/lib/lostfound";
 
@@ -77,13 +78,11 @@ function CadastrarItem() {
     try {
       let imagePath: string | null = null;
       if (file && !isSensitive) {
-        const extension = file.name.split(".").pop() ?? "jpg";
-        const path = `${crypto.randomUUID()}.${extension}`;
-        const { error: uploadError } = await supabase.storage
-          .from("item-photos")
-          .upload(path, file);
-        if (uploadError) throw uploadError;
-        imagePath = path;
+        const { uploadItemPhoto } = await import("@/lib/storage.functions");
+        const uploaded = await uploadItemPhoto({
+          data: { contentType: file.type, data: await fileToBase64(file) },
+        });
+        imagePath = uploaded.path;
       }
 
       const { data, error } = await supabase.rpc("create_found_item", {

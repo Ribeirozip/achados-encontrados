@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchItemById, formatDateBr, maskCpf, maskPhone } from "@/lib/lostfound";
+import { fetchItemById, fileToBase64, formatDateBr, maskCpf, maskPhone } from "@/lib/lostfound";
 
 export const Route = createFileRoute("/solicitar-retirada/$id")({
   head: () => ({
@@ -70,11 +70,11 @@ function SolicitarRetirada() {
     try {
       let proofPath: string | null = null;
       if (proof) {
-        const extension = proof.name.split(".").pop() ?? "jpg";
-        const path = `${crypto.randomUUID()}.${extension}`;
-        const { error: uploadError } = await supabase.storage.from("proofs").upload(path, proof);
-        if (uploadError) throw uploadError;
-        proofPath = path;
+        const { uploadProof } = await import("@/lib/storage.functions");
+        const uploaded = await uploadProof({
+          data: { contentType: proof.type, data: await fileToBase64(proof) },
+        });
+        proofPath = uploaded.path;
       }
 
       const { data, error } = await supabase.rpc("create_recovery_request", {

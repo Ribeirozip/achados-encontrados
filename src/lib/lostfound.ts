@@ -150,8 +150,16 @@ export async function fetchItemById(id: string): Promise<FoundItem | null> {
 
 export async function getPhotoUrl(path: string | null): Promise<string | null> {
   if (!path) return null;
-  const { data } = await supabase.storage.from("item-photos").createSignedUrl(path, 60 * 60);
-  return data?.signedUrl ?? null;
+  const { getPublicItemPhotoUrl } = await import("@/lib/storage.functions");
+  const result = await getPublicItemPhotoUrl({ data: { path } });
+  return result.url;
+}
+
+export async function fileToBase64(file: File): Promise<string> {
+  const buffer = new Uint8Array(await file.arrayBuffer());
+  let binary = "";
+  for (let i = 0; i < buffer.length; i += 1) binary += String.fromCharCode(buffer[i]!);
+  return btoa(binary);
 }
 
 export function formatDateBr(value: string | null) {
