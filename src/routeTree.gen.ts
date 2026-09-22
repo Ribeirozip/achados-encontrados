@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as CadastrarItemRouteImport } from './routes/cadastrar-item'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as SolicitarRetiradaIdRouteImport } from './routes/solicitar-retirada.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +21,23 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CadastrarItemRoute = CadastrarItemRouteImport.update({
   id: '/cadastrar-item',
   path: '/cadastrar-item',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SolicitarRetiradaIdRoute = SolicitarRetiradaIdRouteImport.update({
@@ -32,30 +49,56 @@ const SolicitarRetiradaIdRoute = SolicitarRetiradaIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastrar-item': typeof CadastrarItemRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/admin/login': typeof AdminLoginRoute
   '/solicitar-retirada/$id': typeof SolicitarRetiradaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastrar-item': typeof CadastrarItemRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/admin/login': typeof AdminLoginRoute
   '/solicitar-retirada/$id': typeof SolicitarRetiradaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/cadastrar-item': typeof CadastrarItemRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/admin/login': typeof AdminLoginRoute
   '/solicitar-retirada/$id': typeof SolicitarRetiradaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cadastrar-item' | '/solicitar-retirada/$id'
+  fullPaths:
+    | '/'
+    | '/cadastrar-item'
+    | '/admin'
+    | '/admin/login'
+    | '/solicitar-retirada/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cadastrar-item' | '/solicitar-retirada/$id'
-  id: '__root__' | '/' | '/cadastrar-item' | '/solicitar-retirada/$id'
+  to:
+    | '/'
+    | '/cadastrar-item'
+    | '/admin'
+    | '/admin/login'
+    | '/solicitar-retirada/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/cadastrar-item'
+    | '/_authenticated/admin'
+    | '/admin/login'
+    | '/solicitar-retirada/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   CadastrarItemRoute: typeof CadastrarItemRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   SolicitarRetiradaIdRoute: typeof SolicitarRetiradaIdRoute
 }
 
@@ -68,11 +111,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cadastrar-item': {
       id: '/cadastrar-item'
       path: '/cadastrar-item'
       fullPath: '/cadastrar-item'
       preLoaderRoute: typeof CadastrarItemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solicitar-retirada/$id': {
@@ -85,9 +149,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   CadastrarItemRoute: CadastrarItemRoute,
+  AdminLoginRoute: AdminLoginRoute,
   SolicitarRetiradaIdRoute: SolicitarRetiradaIdRoute,
 }
 export const routeTree = rootRouteImport
