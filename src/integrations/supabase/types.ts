@@ -73,6 +73,7 @@ export type Database = {
       }
       recovery_requests: {
         Row: {
+          admin_note: string | null
           cpf: string
           created_at: string
           date_lost: string | null
@@ -86,9 +87,11 @@ export type Database = {
           phone: string
           proof_url: string | null
           request_code: string
+          reviewed_at: string | null
           status: string
         }
         Insert: {
+          admin_note?: string | null
           cpf: string
           created_at?: string
           date_lost?: string | null
@@ -102,9 +105,11 @@ export type Database = {
           phone: string
           proof_url?: string | null
           request_code?: string
+          reviewed_at?: string | null
           status?: string
         }
         Update: {
+          admin_note?: string | null
           cpf?: string
           created_at?: string
           date_lost?: string | null
@@ -118,6 +123,7 @@ export type Database = {
           phone?: string
           proof_url?: string | null
           request_code?: string
+          reviewed_at?: string | null
           status?: string
         }
         Relationships: [
@@ -129,6 +135,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
@@ -164,9 +191,16 @@ export type Database = {
         }
         Returns: string
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -293,6 +327,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
