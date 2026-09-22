@@ -93,7 +93,7 @@ function CadastrarItem() {
         p_tags: tags,
         p_location: finalLocation,
         p_date_found: dateFound,
-        p_time_found: timeFound || null,
+        p_time_found: timeFound || "",
         p_image_url: imagePath ?? "",
         p_is_sensitive: isSensitive,
       });
