@@ -28,6 +28,13 @@ export function SiteHeader() {
           >
             Cadastrar item encontrado
           </Link>
+          <Link
+            to="/admin/login"
+            className="rounded-full px-3 py-2 text-muted-foreground transition-colors hover:text-foreground"
+            activeProps={{ className: "bg-primary/10 text-primary font-medium" }}
+          >
+            Equipe
+          </Link>
         </nav>
       </div>
     </header>
