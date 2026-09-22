@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790086128600,
+      "tag": "0000_create_lost_and_found",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790086143140,
+      "tag": "0001_storage_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790086569605,
+      "tag": "0002_create_recovery_request_rpc",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790086629808,
+      "tag": "0003_create_found_item_rpc",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790086724911,
+      "tag": "0004_found_item_rpc_time_text",
+      "breakpoints": true
+    }
+  ]
+}

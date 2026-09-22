@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CadastrarItemRouteImport } from './routes/cadastrar-item'
+import { Route as SolicitarRetiradaIdRouteImport } from './routes/solicitar-retirada.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CadastrarItemRoute = CadastrarItemRouteImport.update({
+  id: '/cadastrar-item',
+  path: '/cadastrar-item',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolicitarRetiradaIdRoute = SolicitarRetiradaIdRouteImport.update({
+  id: '/solicitar-retirada/$id',
+  path: '/solicitar-retirada/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cadastrar-item': typeof CadastrarItemRoute
+  '/solicitar-retirada/$id': typeof SolicitarRetiradaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cadastrar-item': typeof CadastrarItemRoute
+  '/solicitar-retirada/$id': typeof SolicitarRetiradaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cadastrar-item': typeof CadastrarItemRoute
+  '/solicitar-retirada/$id': typeof SolicitarRetiradaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/cadastrar-item' | '/solicitar-retirada/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/cadastrar-item' | '/solicitar-retirada/$id'
+  id: '__root__' | '/' | '/cadastrar-item' | '/solicitar-retirada/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CadastrarItemRoute: typeof CadastrarItemRoute
+  SolicitarRetiradaIdRoute: typeof SolicitarRetiradaIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cadastrar-item': {
+      id: '/cadastrar-item'
+      path: '/cadastrar-item'
+      fullPath: '/cadastrar-item'
+      preLoaderRoute: typeof CadastrarItemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solicitar-retirada/$id': {
+      id: '/solicitar-retirada/$id'
+      path: '/solicitar-retirada/$id'
+      fullPath: '/solicitar-retirada/$id'
+      preLoaderRoute: typeof SolicitarRetiradaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CadastrarItemRoute: CadastrarItemRoute,
+  SolicitarRetiradaIdRoute: SolicitarRetiradaIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
