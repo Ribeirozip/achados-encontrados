@@ -15,7 +15,7 @@ export function SiteHeader() {
           <img
             src={ceumaLogo.url}
             alt="Universidade CEUMA"
-            className="hidden h-11 w-16 shrink-0 object-contain sm:block lg:h-12 lg:w-20"
+            className="h-8 w-9 shrink-0 object-contain sm:h-11 sm:w-16 lg:h-12 lg:w-20"
           />
         </Link>
 
