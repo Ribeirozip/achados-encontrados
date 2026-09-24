@@ -20,6 +20,8 @@ export const Route = createFileRoute("/admin/login")({
         property: "og:description",
         content: "Área restrita da equipe do Achados & Perdidos para analisar solicitações.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AdminLogin,
@@ -59,15 +61,24 @@ function AdminLogin() {
   };
 
   return (
-    <div className="mx-auto flex max-w-md flex-col px-4 py-12">
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+    <main className="page-shell py-10 sm:py-16">
+      <div className="surface-panel mx-auto grid max-w-4xl overflow-hidden rounded-2xl md:grid-cols-[0.9fr_1.1fr]">
+        <div className="flex min-h-64 flex-col justify-between bg-primary p-7 text-primary-foreground sm:p-10">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-foreground text-primary">
+            <ShieldCheck className="h-6 w-6" />
+          </span>
+          <div>
+            <p className="text-xs font-bold uppercase opacity-70">Área interna</p>
+            <h1 className="mt-3 text-5xl font-extrabold leading-none">ACESSO DA EQUIPE</h1>
+            <p className="mt-4 text-sm opacity-80">Ambiente seguro para analisar as solicitações de retirada.</p>
+          </div>
+        </div>
+        <div className="p-6 sm:p-10">
+        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary text-primary md:hidden">
           <ShieldCheck className="h-5 w-5" />
         </span>
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight">Acesso da equipe</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Área restrita para analisar as solicitações de retirada.
-        </p>
+        <h2 className="mt-4 text-2xl font-bold md:mt-0">Entre com seus dados</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Use o e-mail institucional cadastrado.</p>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
@@ -101,17 +112,18 @@ function AdminLogin() {
 
         <button
           type="button"
-          className="mt-4 w-full text-sm text-muted-foreground underline-offset-4 hover:underline"
+          className="mt-4 w-full text-sm font-semibold text-primary underline-offset-4 hover:underline"
           onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
         >
           {mode === "signin" ? "Primeiro acesso? Criar conta da equipe" : "Já tenho acesso, entrar"}
         </button>
 
-        <p className="mt-6 rounded-2xl bg-muted p-3 text-xs text-muted-foreground">
+        <p className="mt-6 rounded-xl bg-muted p-3 text-xs text-muted-foreground">
           A primeira conta criada recebe automaticamente o perfil de administrador. As demais
           precisam ser liberadas por um administrador.
         </p>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

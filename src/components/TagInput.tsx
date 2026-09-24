@@ -1,6 +1,7 @@
 import { useState, type KeyboardEvent } from "react";
 import { X, Plus } from "lucide-react";
 import { normalize } from "@/lib/lostfound";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   tags: string[];
@@ -40,21 +41,23 @@ export function TagInput({ tags, onChange, placeholder, suggestions = [] }: Prop
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-card p-3 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+      <div className="flex min-h-16 flex-wrap items-center gap-2 rounded-xl border border-input bg-card p-3 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
         {tags.map((tag) => (
           <span
             key={tag}
             className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
           >
             {tag}
-            <button
+            <Button
               type="button"
               onClick={() => removeTag(tag)}
               aria-label={`Remover ${tag}`}
-              className="rounded-full p-0.5 transition-colors hover:bg-primary/20"
+              variant="ghost"
+              size="icon"
+              className="h-5 w-5 rounded-full p-0 hover:bg-primary/20"
             >
               <X className="h-3.5 w-3.5" />
-            </button>
+            </Button>
           </span>
         ))}
         <input
@@ -70,15 +73,17 @@ export function TagInput({ tags, onChange, placeholder, suggestions = [] }: Prop
       {remainingSuggestions.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {remainingSuggestions.slice(0, 14).map((suggestion) => (
-            <button
+            <Button
               key={suggestion}
               type="button"
               onClick={() => addTag(suggestion)}
-              className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-3 py-1.5 text-sm text-secondary-foreground transition-colors hover:border-primary hover:text-primary"
+              variant="outline"
+              size="sm"
+              className="rounded-full bg-card"
             >
               <Plus className="h-3.5 w-3.5" />
               {suggestion}
-            </button>
+            </Button>
           ))}
         </div>
       )}
