@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { CheckCircle2, Loader2, ShieldAlert, Upload } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldAlert, Upload, ArrowDownRight } from "lucide-react";
 import { toast } from "sonner";
 import { TagInput } from "@/components/TagInput";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,8 @@ export const Route = createFileRoute("/cadastrar-item")({
         content:
           "Encontrou um objeto na instituição? Cadastre-o para que o proprietário possa localizá-lo.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: CadastrarItem,
@@ -109,14 +111,15 @@ function CadastrarItem() {
 
   if (createdCode) {
     return (
-      <div className="mx-auto max-w-xl px-4 py-16 text-center">
+      <main className="page-shell py-12 text-center">
+        <div className="surface-panel mx-auto max-w-xl rounded-2xl p-8 sm:p-12">
         <CheckCircle2 className="mx-auto h-14 w-14 text-primary" />
         <h1 className="mt-5 text-2xl font-semibold">Objeto cadastrado com sucesso!</h1>
         <p className="mt-3 text-muted-foreground">
           Agora ele faz parte do banco de Achados &amp; Perdidos e poderá ser encontrado por quem
           perdeu.
         </p>
-        <div className="mt-6 rounded-2xl border border-border bg-card p-5">
+        <div className="mt-6 rounded-xl bg-secondary p-5">
           <p className="text-sm text-muted-foreground">Código do objeto</p>
           <p className="text-2xl font-semibold tracking-wide text-primary">{createdCode}</p>
         </div>
@@ -128,43 +131,50 @@ function CadastrarItem() {
             Cadastrar outro objeto
           </Button>
         </div>
-      </div>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-20 pt-10">
-      <h1 className="text-3xl font-semibold tracking-tight">Encontrou alguma coisa?</h1>
-      <p className="mt-3 text-muted-foreground">
-        Cadastre o objeto para que o proprietário possa encontrá-lo.
-      </p>
+    <main className="page-shell pb-20 pt-6 sm:pt-10">
+      <section className="surface-panel grid overflow-hidden rounded-2xl sm:grid-cols-[1fr_auto]">
+        <div className="p-6 sm:p-10">
+          <span className="text-xs font-bold uppercase text-primary">Cadastro de item</span>
+          <h1 className="mt-3 max-w-2xl text-4xl font-extrabold leading-none text-primary sm:text-6xl">ENCONTROU ALGUMA COISA?</h1>
+          <p className="mt-4 max-w-xl text-muted-foreground">Cadastre o objeto para que o proprietário possa encontrá-lo.</p>
+        </div>
+        <div className="hidden w-44 items-end justify-end bg-primary p-6 text-primary-foreground sm:flex">
+          <ArrowDownRight className="h-16 w-16" strokeWidth={1.5} />
+        </div>
+      </section>
 
-      <div className="mt-8 space-y-8 rounded-3xl border border-border bg-card p-5 sm:p-8">
+      <section className="surface-panel mt-5 space-y-8 rounded-2xl p-5 sm:p-8">
         <div>
           <Label className="text-base">Que tipo de objeto você encontrou?</Label>
           <div className="mt-3 flex flex-wrap gap-2">
             {CATEGORIES.map((category) => {
               const selected = categories.includes(category);
               return (
-                <button
+                 <Button
                   key={category}
                   type="button"
                   onClick={() => toggleCategory(category)}
                   className={
                     selected
-                      ? "rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-                      : "rounded-full border border-border bg-secondary px-4 py-2 text-sm text-secondary-foreground transition-colors hover:border-primary hover:text-primary"
+                      ? "rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground"
+                      : "rounded-full border border-border bg-card px-4 py-2 text-sm text-secondary-foreground hover:border-primary hover:text-primary"
                   }
                 >
                   {category}
-                </button>
+                 </Button>
               );
             })}
           </div>
         </div>
 
         {isSensitive && (
-          <div className="flex gap-3 rounded-2xl bg-accent p-4 text-sm text-accent-foreground">
+            <div className="flex gap-3 rounded-xl border border-primary/20 bg-accent p-4 text-sm text-accent-foreground">
             <ShieldAlert className="h-5 w-5 shrink-0" />
             <p>
               Por segurança, documentos pessoais não terão suas informações ou imagens exibidas
@@ -213,7 +223,7 @@ function CadastrarItem() {
             </p>
             <label
               htmlFor="photo"
-              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-border p-4 text-sm text-muted-foreground transition-colors hover:border-primary"
+               className="flex min-h-20 cursor-pointer items-center gap-3 rounded-xl border border-dashed border-input bg-muted/40 p-4 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <Upload className="h-5 w-5" />
               {file ? file.name : "Selecionar imagem"}
@@ -232,18 +242,18 @@ function CadastrarItem() {
           <Label>Onde você encontrou?</Label>
           <div className="flex flex-wrap gap-2">
             {LOCATIONS.map((option) => (
-              <button
+              <Button
                 key={option}
                 type="button"
                 onClick={() => setLocation(option)}
                 className={
                   location === option
-                    ? "rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-                    : "rounded-full border border-border bg-secondary px-4 py-2 text-sm text-secondary-foreground transition-colors hover:border-primary hover:text-primary"
+                    ? "rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground"
+                    : "rounded-full border border-border bg-card px-4 py-2 text-sm text-secondary-foreground hover:border-primary hover:text-primary"
                 }
               >
                 {option}
-              </button>
+              </Button>
             ))}
           </div>
           {location === "Outro" && (
@@ -283,7 +293,7 @@ function CadastrarItem() {
           {saving && <Loader2 className="h-5 w-5 animate-spin" />}
           Cadastrar objeto
         </Button>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

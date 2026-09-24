@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { CheckCircle2, Loader2, Upload } from "lucide-react";
+import { CheckCircle2, Loader2, Upload, ArrowDownRight } from "lucide-react";
 import { toast } from "sonner";
 import { ItemPhoto } from "@/components/ItemPhoto";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,8 @@ export const Route = createFileRoute("/solicitar-retirada/$id")({
         content:
           "Confirme seus dados e comprove a propriedade para solicitar a retirada do objeto encontrado.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SolicitarRetirada,
@@ -102,14 +104,15 @@ function SolicitarRetirada() {
 
   if (requestCode) {
     return (
-      <div className="mx-auto max-w-xl px-4 py-16 text-center">
+      <main className="page-shell py-12 text-center">
+        <div className="surface-panel mx-auto max-w-xl rounded-2xl p-8 sm:p-12">
         <CheckCircle2 className="mx-auto h-14 w-14 text-primary" />
         <h1 className="mt-5 text-2xl font-semibold">Solicitação enviada!</h1>
         <p className="mt-3 text-muted-foreground">
           Recebemos suas informações. A equipe responsável irá analisar os dados e confirmar a
           retirada.
         </p>
-        <div className="mt-6 space-y-3 rounded-2xl border border-border bg-card p-5 text-left">
+        <div className="mt-6 space-y-3 rounded-xl bg-secondary p-5 text-left">
           <div>
             <p className="text-sm text-muted-foreground">Número da solicitação</p>
             <p className="text-2xl font-semibold tracking-wide text-primary">#{requestCode}</p>
@@ -122,23 +125,28 @@ function SolicitarRetirada() {
         <Button asChild className="mt-8">
           <Link to="/">Voltar para a página inicial</Link>
         </Button>
-      </div>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-20 pt-10">
-      <h1 className="text-3xl font-semibold tracking-tight">Vamos confirmar que o objeto é seu</h1>
-      <p className="mt-3 text-muted-foreground">
-        Preencha seus dados para solicitar a retirada do objeto.
-      </p>
+    <main className="page-shell pb-20 pt-6 sm:pt-10">
+      <section className="surface-panel grid overflow-hidden rounded-2xl sm:grid-cols-[1fr_auto]">
+        <div className="p-6 sm:p-10">
+          <span className="text-xs font-bold uppercase text-primary">Solicitação de retirada</span>
+          <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-none text-primary sm:text-6xl">VAMOS CONFIRMAR QUE O OBJETO É SEU</h1>
+          <p className="mt-4 text-muted-foreground">Preencha seus dados para solicitar a retirada do objeto.</p>
+        </div>
+        <div className="hidden w-44 items-end justify-end bg-primary p-6 text-primary-foreground sm:flex"><ArrowDownRight className="h-16 w-16" strokeWidth={1.5} /></div>
+      </section>
 
-      <div className="mt-6 flex items-center gap-4 rounded-3xl border border-border bg-card p-4">
+      <div className="surface-panel mt-5 flex items-center gap-4 rounded-2xl p-4">
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Carregando objeto...</p>
         ) : item ? (
           <>
-            <ItemPhoto path={item.image_url} alt={item.name} className="h-20 w-20 rounded-2xl" />
+            <ItemPhoto path={item.image_url} alt={item.name} className="h-20 w-20 rounded-xl" />
             <div className="text-sm">
               <p className="text-base font-semibold">{item.name}</p>
               <p className="text-muted-foreground">{item.tags.slice(0, 3).join(" · ")}</p>
@@ -152,7 +160,7 @@ function SolicitarRetirada() {
         )}
       </div>
 
-      <div className="mt-8 space-y-8 rounded-3xl border border-border bg-card p-5 sm:p-8">
+      <section className="surface-panel mt-5 space-y-8 rounded-2xl p-5 sm:p-8">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="fullName">Nome completo</Label>
@@ -260,7 +268,7 @@ function SolicitarRetirada() {
           </p>
           <label
             htmlFor="proof"
-            className="flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-border p-4 text-sm text-muted-foreground transition-colors hover:border-primary"
+             className="flex min-h-20 cursor-pointer items-center gap-3 rounded-xl border border-dashed border-input bg-muted/40 p-4 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
             <Upload className="h-5 w-5" />
             {proof ? proof.name : "Selecionar arquivo (JPG, PNG ou PDF)"}
@@ -274,7 +282,7 @@ function SolicitarRetirada() {
           />
         </div>
 
-        <label className="flex items-start gap-3 rounded-2xl bg-secondary p-4 text-sm text-secondary-foreground">
+        <label className="flex items-start gap-3 rounded-xl bg-secondary p-4 text-sm text-secondary-foreground">
           <Checkbox
             checked={declared}
             onCheckedChange={(checked) => setDeclared(checked === true)}
@@ -290,7 +298,7 @@ function SolicitarRetirada() {
           {saving && <Loader2 className="h-5 w-5 animate-spin" />}
           Solicitar retirada
         </Button>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
