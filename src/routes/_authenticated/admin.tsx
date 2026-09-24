@@ -38,6 +38,8 @@ export const Route = createFileRoute("/_authenticated/admin")({
         property: "og:description",
         content: "Painel da equipe para analisar e aprovar as solicitações de retirada de objetos.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AdminPanel,
@@ -68,7 +70,7 @@ function StatusBadge({ status }: { status: string }) {
         ? "bg-destructive/10 text-destructive"
         : "bg-muted text-muted-foreground";
   return (
-    <span className={`rounded-full px-3 py-1 text-xs font-medium ${tone}`}>
+    <span className={`rounded-full px-3 py-1 text-xs font-bold ${tone}`}>
       {STATUS_LABEL[status] ?? status}
     </span>
   );
@@ -183,8 +185,9 @@ function AdminPanel() {
 
   if (state === "denied") {
     return (
-      <div className="mx-auto max-w-md px-4 py-16 text-center">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
+      <div className="page-shell py-16 text-center">
+        <div className="surface-panel mx-auto max-w-md rounded-2xl p-8">
+        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
           <ShieldAlert className="h-5 w-5" />
         </span>
         <h1 className="mt-4 text-xl font-semibold">Acesso restrito</h1>
@@ -195,15 +198,17 @@ function AdminPanel() {
         <Button className="mt-6" variant="outline" onClick={handleSignOut}>
           Sair
         </Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pb-20">
-      <div className="flex flex-col gap-3 pt-10 sm:flex-row sm:items-end sm:justify-between">
+    <main className="page-shell pb-20 pt-6 sm:pt-10">
+      <div className="surface-panel flex flex-col gap-5 rounded-2xl p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          <span className="text-xs font-bold uppercase text-primary">Painel da equipe</span>
+          <h1 className="mt-2 text-3xl font-extrabold text-primary sm:text-5xl">
             Solicitações de retirada
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -215,35 +220,37 @@ function AdminPanel() {
         </Button>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="mt-5 flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-3">
         {FILTERS.map((f) => (
-          <button
+          <Button
             key={f.key}
             type="button"
             onClick={() => setFilter(f.key)}
-            className={`rounded-full px-4 py-2 text-sm transition-colors ${
+            variant="ghost"
+            size="sm"
+            className={`rounded-full px-4 py-2 text-sm ${
               filter === f.key
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground hover:text-foreground"
             }`}
           >
             {f.label}
-          </button>
+          </Button>
         ))}
       </div>
 
       {visible.length === 0 ? (
-        <p className="mt-10 rounded-3xl border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+        <p className="mt-10 rounded-2xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
           Nenhuma solicitação nesta situação no momento.
         </p>
       ) : (
-        <ul className="mt-6 space-y-4">
+          <ul className="mt-5 grid gap-4 lg:grid-cols-2">
           {visible.map((request) => {
             const isOpen = openId === request.id;
             return (
               <li
                 key={request.id}
-                className="rounded-3xl border border-border bg-card p-5 shadow-sm"
+                className={`rounded-2xl border bg-card p-5 shadow-sm transition-colors ${isOpen ? "border-primary lg:col-span-2" : "border-border hover:border-primary/60"}`}
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -283,7 +290,7 @@ function AdminPanel() {
                 </Button>
 
                 {isOpen ? (
-                  <div className="mt-2 space-y-4 rounded-2xl bg-muted/60 p-4">
+                  <div className="mt-2 space-y-4 rounded-xl bg-muted/60 p-4 sm:p-6">
                     <dl className="grid gap-3 sm:grid-cols-2">
                       <Field label="Nome completo" value={request.full_name} />
                       <Field label="CPF" value={request.cpf} />
@@ -362,7 +369,7 @@ function AdminPanel() {
                     </div>
 
                     {request.status === "approved" ? (
-                      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-3 text-sm">
+                      <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 text-sm">
                         <p className="font-medium text-primary">Mensagem para o solicitante</p>
                         <p className="mt-1 text-muted-foreground">
                           “Sua solicitação foi aprovada. Você já pode retirar o objeto no Achados &
@@ -381,7 +388,7 @@ function AdminPanel() {
           })}
         </ul>
       )}
-    </div>
+    </main>
   );
 }
 
