@@ -1,15 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { Search, Plus, Users } from "lucide-react";
+import ceumaLogo from "@/assets/ceuma-universidade.png.asset.json";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur">
       <div className="page-shell flex min-h-16 items-center justify-between gap-4 py-3">
-        <Link to="/" className="flex min-w-0 items-center gap-3">
+        <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[3px_3px_0_var(--foreground)]">
             <Search className="h-5 w-5" />
           </span>
           <span className="font-display text-base font-extrabold uppercase leading-none sm:text-lg">Achados &amp;<br className="hidden sm:block" /> Perdidos</span>
+          <span className="mx-1 hidden h-9 w-px bg-border sm:block" aria-hidden="true" />
+          <img
+            src={ceumaLogo.url}
+            alt="Universidade CEUMA"
+            className="hidden h-11 w-16 shrink-0 object-contain sm:block lg:h-12 lg:w-20"
+          />
         </Link>
 
         <nav className="flex items-center gap-1 overflow-x-auto text-sm sm:gap-2">
